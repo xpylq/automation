@@ -5,8 +5,7 @@ import json
 
 
 def login(is_proxy):
-    user_list = dbComponent.get_new_user(2)
-    # user_list = dbComponent.get_un_login_user(2)
+    user_list = dbComponent.get_un_login_user(2)
     driver = driverUtil.create_driver(is_proxy, False)
     fail_id_list = []
     for user in user_list:
@@ -80,6 +79,7 @@ def dianzan(url, is_proxy):
 def yanghao():
     user_list = dbComponent.get_login_user(2, 2000)
     driver = driverUtil.create_driver(False, True)
+    home_page_list = []
     num = 0
     for user in user_list:
         try:
@@ -93,17 +93,21 @@ def yanghao():
                 dbComponent.delete_cookies(user.id)
             else:
                 num += 1
+                home_page_list.append("https://www.zhihu.com/people/" + url_token)
                 print(num)
         except Exception as e:
             dbComponent.delete_cookies(user.id)
+            print("账号异常:", user.id)
         finally:
             driver.delete_all_cookies()
             time.sleep(5)
+    for home_page in home_page_list:
+        print(home_page)
     print("totalNum:", num)
 
 
 if __name__ == "__main__":
     # login(False)
-    #init_new()
-    # yanghao()
-    dianzan("https://www.zhihu.com/question/27188550/answer/99120693", False)
+    # init_new()
+    yanghao()
+    # dianzan("https://www.zhihu.com/question/27188550/answer/99120693", False)
